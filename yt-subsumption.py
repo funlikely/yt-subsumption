@@ -1,20 +1,24 @@
 import subprocess
 import sys
+import os
 
 
-def download_videos(input_file, output_dir, yt_dlp_path):
+def download_videos(input_file, output_dir):
     with open(input_file, 'r') as file:
         urls = file.readlines()
 
     for url in urls:
         url = url.strip()
         if url:
-            download_video(url, output_dir, yt_dlp_path)
+            download_video(url, output_dir)
 
 
-def download_video(url, output_dir, yt_dlp_path):
-    command = [yt_dlp_path, '-f', 'bv*[ext=mp4]+ba[ext=m4a]/b[ext=mp4]/bv*+ba/b', url, '-o',
-               f'{output_dir}/%(title)s.%(ext)s']
+def download_video(url, output_dir):
+    # Create the output directory if it doesn't exist
+    os.makedirs(output_dir, exist_ok=True)
+
+    command = ['yt-dlp.exe', '-f', 'bv*[ext=mp4]+ba[ext=m4a]/b[ext=mp4]/bv*+ba/b', url, '-o',
+               f'{output_dir}/%(uploader)s - %(title)s [%(id)s].%(ext)s']
 
     try:
         subprocess.run(command, check=True)
@@ -24,12 +28,10 @@ def download_video(url, output_dir, yt_dlp_path):
 
 
 if __name__ == "__main__":
-    if len(sys.argv) != 4:
+    if len(sys.argv) != 3:
         print("Usage: python script.py input_file output_dir yt_dlp_path")
         sys.exit(1)
 
     input_file = sys.argv[1]
     output_dir = sys.argv[2]
-    yt_dlp_path = sys.argv[3]
-
-    download_videos(input_file, output_dir, yt_dlp_path)
+    download_videos(input_file, output_dir)
