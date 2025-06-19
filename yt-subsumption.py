@@ -17,8 +17,9 @@ def download_video(url, output_dir):
     # Create the output directory if it doesn't exist
     os.makedirs(output_dir, exist_ok=True)
 
-    command = ['yt-dlp.exe', '-f', 'bv*[ext=mp4]+ba[ext=m4a]/b[ext=mp4]/bv*+ba/b', url, '-o',
-               f'{output_dir}/%(uploader)s - %(title)s [%(id)s].%(ext)s']
+    command = ['yt-dlp.exe', '-f', 'bestvideo+bestaudio',
+               '--merge-output-format', 'mp4', url,
+               '-o', f'{output_dir}/%(uploader)s - %(title)s [%(id)s].%(ext)s']
 
     try:
         subprocess.run(command, check=True)
