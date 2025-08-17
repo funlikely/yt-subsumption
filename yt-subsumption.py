@@ -1,6 +1,7 @@
 import subprocess
 import sys
 import os
+import shlex
 
 
 def download_videos(input_file, output_dir):
@@ -20,6 +21,7 @@ def download_video(url, output_dir):
     command = ['yt-dlp.exe', '-f', 'bestvideo+bestaudio',
                '--merge-output-format', 'mp4', url,
                '-o', f'{output_dir}/%(uploader)s - %(title)s [%(id)s].%(ext)s']
+    print("Running command: ", " ".join(shlex.quote(arg) for arg in command))
 
     try:
         subprocess.run(command, check=True)
